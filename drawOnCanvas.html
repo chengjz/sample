@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      canvas {
+        border:1px solid #d3d3d3;
+        background-color: #f1f1f1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Draw on a Canvas</h1>
+    <canvas id="myCanvas" width="800" height="500"></canvas>
+    <div>
+      <p>"b" - change pen color to blue</p>
+      <p>"g" - change pen color to green</p>
+      <p>"r" - change pen color to red</p>
+      <p>"y" - change pen color to yellow</p>
+      <p>"up arrow" - make pen size larger</p>
+      <p>"down arrow" - make pen size smaller</p>
+      <p>"space bar" - clear the canvas (other than the current pen tip)</p>
+      <p> have fun!</p>
+    </div>
+    <script>
+
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+
+      var clickX = new Array();
+      var clickY = new Array();
+      var clickDrag = new Array();
+      var paint;
+
+      var colorYellow = "#ffcf33";
+      var colorBlue = "#0000FF";
+      var colorRed = "#FF0000";
+      var colorGreen = "#008000";
+
+      var curColor = colorRed;
+      var clickColor = new Array();
+      var clickRadius = new Array();
+      var curRadius = 15;
+
+      canvas.addEventListener('mousedown', function(e){
+        var mouseX = e.pageX - this.offsetLeft;
+        var mouseY = e.pageY - this.offsetTop;
+          
+        paint = true;
+        addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+        redraw();
+      }, false)
+
+      canvas.addEventListener('mousemove', function(e){
+        if(paint){
+          addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+          redraw();
+        }
+      }, false);
+
+      canvas.addEventListener('mouseup', function(e){
+        paint = false;
+      }, false)
+
+      canvas.addEventListener('mouseleave', function(e){
+        paint = false;
+      }, true)
+
+      // 66 "b" - change pen color to blue
+      // 71 "g" - change pen color to green
+      // 82 "r" - change pen color to red
+      // 89 "y" - change pen color to yellow
+      // 38 "up arrow" - make pen size larger
+      // 40 "down arrow" - make pen size smaller
+      // 32 "space bar" - clear the canvas (other than the current pen tip)
+
+      window.addEventListener('keydown', doKeyDown, false)
+
+      function doKeyDown(e){
+        console.log(e.keyCode)
+
+        if (e.keyCode == 66) curColor = colorBlue;
+
+        if (e.keyCode == 71) curColor = colorGreen;
+
+        if (e.keyCode == 82) curColor = colorRed;
+        
+        if (e.keyCode == 89) curColor = colorYellow;
+
+        if (e.keyCode == 38) curRadius += 3;
+        
+        if (e.keyCode == 40) {
+          curRadius -= 3;
+          if (curRadius <= 1) curRadius = 1;
+        }
+
+        if (e.keyCode == 32) {
+          context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+          clickColor = [];
+          clickRadius = [];
+          clickX = [];
+          clickY = [];
+          clickDrag = [];
+        }
+
+      }
+
+      function addClick(x, y, dragging)
+      {
+        clickX.push(x);
+        clickY.push(y);
+        clickDrag.push(dragging);
+        clickColor.push(curColor);
+        clickRadius.push(curRadius);
+      }
+
+      function redraw(){
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+        
+        for(var i=0; i < clickX.length; i++) {   
+          context.fillStyle = clickColor[i];
+          context.beginPath();
+          if(clickDrag[i] && i){
+            context.arc(clickX[i-1], clickY[i-1],clickRadius[i-1],0,Math.PI*2,true);
+           }else{
+             context.arc(clickX[i]-1, clickY[i],clickRadius[i],0,Math.PI*2,true);
+           }
+
+           context.closePath();
+           context.fill()
+        }
+      }
+    </script>
+  </body>
+</html>
+      
