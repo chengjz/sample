@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Challenge Two</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script>
+	   function setHomeAddress(){
+      // YOUR  JavaScript CODE HERE
+      // window.alert("Yep, my function is being called");
+      var x = document.getElementById("billing");
+      console.log(x.value)
+      if (document.getElementById("useBilling").checked) {
+      	document.getElementById("home").value = x.value;
+      	document.getElementById("home").disabled = true;
+      	// window`alert("Yep, my function is being called");
+     } else {
+     	document.getElementById("home").value = null;
+     	document.getElementById("home").disabled = false;
+     }
+ }
+    </script> -->
+    <script>
+      $(document).ready(function(){
+        $("#useBilling").click(function(){
+          if ($(this).is(':checked')){
+            $("#home").attr("disabled", true);
+            $("#home").val($("#billing").val());
+          } else {
+            $("#home").attr("disabled", false);
+            $("#home").val("");
+          }
+    
+        })
+      })
+    </script>
+</head>
+<body>
+    <h1>Challenge Two</h1>
+    <form action="challenge3.html">
+      <fieldset>
+        <legend>Billing Information</legend>
+        <div>
+          <label for ="billing">Billing Address:</label><br>
+          <textarea name="billingAdd" id="billing"></textarea>
+        </div>
+
+        <div>
+          <label for ="home">Home Address:</label><br>
+          <input type="checkbox" name="useBilling" onclick = "setHomeAddress()" id="useBilling"> Same as above <br>
+        <textarea name="homeAdd" id="home"></textarea>
+        </div>
+        <input type = "submit" value = "Go To Challenge 3">
+      </fieldset>
+      </form>
+</body>
+</html>
